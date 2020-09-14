@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cskaoyan.mall.mapper.dashBoard.DashBoardMapper">
+
+    <select id="countDashBoard" resultType="com.cskaoyan.mall.bean.dashBoard.DashBoardBean">
+          SELECT
+            (SELECT COUNT(*) FROM cskaoyanmall_user)AS userTotal,
+            (SELECT COUNT(*) FROM cskaoyanmall_order)AS orderTotal,
+            (SELECT COUNT(*) FROM cskaoyanmall_goods_product)AS productTotal,
+            (SELECT COUNT(*) FROM cskaoyanmall_goods)AS goodsTotal;
+    </select>
+    <select id="selectOldPasswordByName" resultType="java.lang.Integer">
+         SELECT id FROM cskaoyanmall_admin WHERE username=#{username} and `password`=#{oldPassword};
+    </select>
+
+
+    <update id="updatePasswordByName">
+         UPDATE cskaoyanmall_admin SET `password`=#{newPassword} WHERE username=#{username};
+    </update>
+
+</mapper>

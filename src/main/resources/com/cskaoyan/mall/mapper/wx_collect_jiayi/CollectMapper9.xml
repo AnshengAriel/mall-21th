@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cskaoyan.mall.mapper.wx_collect_jiayi.CollectMapper9">
+
+
+    <select id="selectCollect" resultType="com.cskaoyan.mall.bean.wx_collect_jiayi.CollectBean">
+
+        SELECT brief,c.id,`name`,pic_url AS picUrl,retail_price AS retailPrice,type,value_id AS valueId FROM cskaoyanmall_collect c LEFT JOIN cskaoyanmall_goods g ON c.value_id=g.goods_sn WHERE c.user_id=#{userId} and c.type=#{type} ORDER BY c.update_time desc
+    </select>
+
+
+    <select id="selectUserId" resultType="java.lang.Integer">
+
+    SELECT id FROM cskaoyanmall_user WHERE username=#{username}
+    </select>
+
+
+    <select id="selectId" resultType="java.lang.Integer">
+
+    SELECT id FROM cskaoyanmall_collect WHERE value_id = #{valueId} AND type = #{type} AND user_id=#{userId}
+    </select>
+
+    <insert id="insertCollect">
+
+        INSERT INTO cskaoyanmall_collect (user_id,value_id,type,add_time,update_time,deleted) VALUES (#{userId},#{valueId},#{type},NOW(),NOW(),0);
+    </insert>
+
+
+    <delete id="deleteCollect">
+
+        DELETE FROM cskaoyanmall_collect WHERE user_id=#{userId} AND value_id=#{valueId} AND type=#{type};
+    </delete>
+</mapper>

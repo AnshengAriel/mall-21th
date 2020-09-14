@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cskaoyan.mall.mapper.statistic.StatisticMapper">
+
+
+
+
+    <!--<select id="selectUserById" resultType="com.cskaoyan.bean.User">
+        select id,username,password,age,gender from j21_user_t where id = #{id}
+    </select>
+
+    <insert id="insertUser"></insert>
+    <update id="updateUser"></update>
+    <delete id="deleterUserById"></delete>-->
+
+
+    <select id="selectUserStatistic" resultType="com.cskaoyan.mall.bean.statistic.UserBean">
+
+        SELECT count(*) as users, DATE(add_time) as day FROM cskaoyanmall_user GROUP BY DATE(add_time)ORDER BY DATE(add_time) asc;
+    </select>
+
+
+    <select id="selectOrderStatistic" resultType="com.cskaoyan.mall.bean.statistic.OrderBean">
+        SELECT  day,amount,customers,orders,CAST(amount/customers as decimal(18,2)) as pcr FROM
+(SELECT COUNT(*)as orders,DATE(update_time) AS day FROM cskaoyanmall_order GROUP BY day)a
+LEFT JOIN
+(SELECT SUM(actual_price) AS amount,DATE(update_time) as dayy FROM cskaoyanmall_order as b GROUP BY dayy)b
+ON day=dayy
+LEFT JOIN
+(SELECT COUNT(DISTINCT user_id) AS customers ,DATE(update_time) as dayyy from cskaoyanmall_order GROUP BY DATE(update_time))c
+ON day=dayyy;
+    </select>
+
+
+    <select id="selectGoodStatistic" resultType="com.cskaoyan.mall.bean.statistic.GoodBean">
+
+        SELECT  day,amount,orders,products FROM
+(SELECT COUNT(*)as orders,DATE(update_time) AS day FROM cskaoyanmall_order GROUP BY day)a
+LEFT JOIN
+(SELECT SUM(number) AS products,DATE(update_time) as dayy FROM cskaoyanmall_order_goods as b GROUP BY dayy)b
+ON day=dayy
+LEFT JOIN
+(SELECT CAST(SUM(number*price) as decimal(18,2)) AS amount,DATE(update_time) as dayyy FROM cskaoyanmall_order_goods GROUP BY dayyy)c
+ON day=dayyy;
+    </select>
+</mapper>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cskaoyan.mall.mapper.wx_address_jiayi.AddressMapper9">
+
+    <select id="selectAddress" resultType="com.cskaoyan.mall.bean.wx_address_jiayi.Address">
+        SELECT name,id,mobile,address AS detailedAddress, CASE is_default
+	WHEN '1' THEN
+		'true'
+	ELSE
+		'false'
+END as is_default
+ FROM cskaoyanmall_address WHERE user_id=( SELECT id FROM cskaoyanmall_user WHERE username=#{username});
+    </select>
+
+
+    <select id="selectRegion" resultType="com.cskaoyan.mall.bean.wx_address_jiayi.Region9">
+         SELECT
+ (SELECT `name` FROM cskaoyanmall_region WHERE id=(SELECT province_id FROM cskaoyanmall_address WHERE id=#{addressId})) AS provinceName,
+ (SELECT `name` FROM cskaoyanmall_region WHERE id=(SELECT city_id FROM cskaoyanmall_address WHERE id=#{addressId})) AS cityName,
+ (SELECT `name` FROM cskaoyanmall_region WHERE id=(SELECT area_id FROM cskaoyanmall_address WHERE id=#{addressId})) AS areaName;
+    </select>
+
+
+    <select id="selectAddDetail" resultType="com.cskaoyan.mall.bean.wx_address_jiayi.AddressDetailBean">
+        SELECT address,area_id AS areaId,city_id AS cityId,id,is_default,mobile,`name`,province_id AS provinceId FROM cskaoyanmall_address WHERE id=#{id};
+    </select>
+
+
+    <select id="selectRegion8" resultType="com.cskaoyan.mall.bean.wx_address_jiayi.Region8">
+        SELECT id,pid,name,type,code FROM cskaoyanmall_region WHERE pid=#{id};
+    </select>
+    <select id="selectUserId" resultType="java.lang.Integer">
+        SELECT id FROM cskaoyanmall_user WHERE username =#{username};
+    </select>
+
+
+    <update id="updateAddress">
+
+        UPDATE cskaoyanmall_address  SET  address=#{addressDetailBean.address},
+        area_id=#{addressDetailBean.areaId},
+        city_id=#{addressDetailBean.cityId},
+        is_default=#{addressDetailBean.isDefault},
+        mobile=#{addressDetailBean.mobile},
+        `name`=#{addressDetailBean.name},
+        province_id=#{addressDetailBean.provinceId}
+WHERE id=#{addressDetailBean.id};
+    </update>
+
+
+    <update id="updateDefault">
+    UPDATE cskaoyanmall_address SET is_default=0 WHERE user_id=(SELECT min(id) FROM (SELECT a.id as id FROM cskaoyanmall_user AS a LEFT JOIN cskaoyanmall_address AS b ON a.id=b.user_id WHERE b.user_id=(SELECT user_id FROM cskaoyanmall_address WHERE id=#{id}))c);
+    </update>
+
+
+
+    <insert id="insertAddress">
+INSERT INTO cskaoyanmall_address (address,area_id,city_id,is_default,mobile,`name`,province_id,user_id) VALUES
+                (#{addressDetailBean.address},#{addressDetailBean.areaId},#{addressDetailBean.cityId},
+                #{addressDetailBean.isDefault},#{addressDetailBean.mobile},#{addressDetailBean.name},
+                #{addressDetailBean.provinceId},#{userId});
+    </insert>
+
+
+    <update id="updateDefaultByName">
+        UPDATE cskaoyanmall_address SET is_default=0 WHERE user_id=(SELECT id FROM cskaoyanmall_user WHERE username=#{username});
+    </update>
+
+
+    <delete id="deleteAddressById">
+        DELETE FROM cskaoyanmall_address WHERE id=#{id};
+    </delete>
+</mapper>

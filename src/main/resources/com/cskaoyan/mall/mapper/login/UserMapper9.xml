@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cskaoyan.mall.mapper.login.UserMapper9">
+
+
+    <select id="selectPasswordByName" resultType="java.lang.String">
+        SELECT `password` FROM cskaoyanmall_user WHERE username=#{username};
+    </select>
+
+    <select id="selectInfoByName" resultType="com.cskaoyan.mall.bean.login.UserInfo">
+        SELECT nickname as nickName,avatar as avatarUrl FROM cskaoyanmall_user WHERE username=#{username};
+    </select>
+
+    <select id="selectOrderCount" resultType="com.cskaoyan.mall.bean.login.Order">
+        SELECT
+(SELECT id FROM cskaoyanmall_user WHERE username=#{username})AS user_id1 ,
+(SELECT COUNT(*) FROM cskaoyanmall_order WHERE user_id=user_id1 AND order_status='101')AS unpaid,
+(SELECT COUNT(*) FROM cskaoyanmall_order WHERE user_id=user_id1 AND order_status='201')AS unship,
+(SELECT COUNT(*) FROM cskaoyanmall_order WHERE user_id=user_id1 AND order_status='301')AS unrecv,
+(SELECT COUNT(*) FROM cskaoyanmall_order_goods WHERE `comment`=0 and order_id IN (SELECT id AS order_id FROM cskaoyanmall_order WHERE user_id=user_id1 AND order_status IN(401,402) ))AS uncomment;
+    </select>
+
+
+    <select id="selectCount" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM cskaoyanmall_user WHERE username=#{username};
+    </select>
+
+
+    <insert id="insertUser">
+        INSERT INTO cskaoyanmall_user (username,`password`,mobile,add_time,update_time,`status`,deleted,user_level) VALUES
+(#{username},#{password},#{mobile},NOW(),NOW(),0,0,0);
+    </insert>
+
+
+    <update id="resetPassword">
+        UPDATE cskaoyanmall_user SET `password`=#{password} WHERE mobile=#{mobile};
+    </update>
+</mapper>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cskaoyan.mall.mapper.wx_brand_jiayi.BrandMapper9">
+
+
+    <select id="selectBrand" resultType="com.cskaoyan.mall.bean.wx_brand_jiayi.BrandBean">
+
+        SELECT id,`desc`,`name`,pic_url AS picUrl,floor_price AS floorPrice FROM cskaoyanmall_brand ORDER BY update_time desc
+    </select>
+
+
+
+    <select id="selectBrandDetail" resultType="com.cskaoyan.mall.bean.wx_brand_jiayi.Brand">
+
+        SELECT add_time AS addTime,deleted,`desc`,floor_price AS floorPrice,id,`name`,pic_url AS picUrl,sort_order AS sortOrder,update_time AS updateTime
+FROM cskaoyanmall_brand WHERE id=#{id};
+    </select>
+</mapper>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cskaoyan.mall.mapper.config.ConfigMapper">
+
+
+
+    <select id="selectMallConfig" resultType="com.cskaoyan.mall.bean.config.MallConfigBean">
+
+        SELECT
+(SELECT key_value FROM cskaoyanmall_system WHERE key_name='cskaoyan_mall_mall_address')AS cskaoyan_mall_mall_address,
+(SELECT key_value FROM cskaoyanmall_system WHERE key_name='cskaoyan_mall_mall_name')AS cskaoyan_mall_mall_name,
+(SELECT key_value FROM cskaoyanmall_system WHERE key_name='cskaoyan_mall_mall_phone')AS cskaoyan_mall_mall_phone,
+(SELECT key_value FROM cskaoyanmall_system WHERE key_name='cskaoyan_mall_mall_qq')AS cskaoyan_mall_mall_qq;
+    </select>
+
+
+    <select id="selectExpressConfig" resultType="com.cskaoyan.mall.bean.config.ExpressConfigBean">
+
+        SELECT
+(SELECT key_value FROM cskaoyanmall_system WHERE key_name='cskaoyan_mall_express_freight_min')AS cskaoyan_mall_express_freight_min,
+(SELECT key_value FROM cskaoyanmall_system WHERE key_name='cskaoyan_mall_express_freight_value')AS cskaoyan_mall_express_freight_value;
+    </select>
+
+
+    <select id="selectOrderConfig" resultType="com.cskaoyan.mall.bean.config.OrderConfigBean">
+
+      SELECT
+(SELECT key_value FROM cskaoyanmall_system WHERE key_name='cskaoyan_mall_order_comment')AS cskaoyan_mall_order_comment,
+(SELECT key_value FROM cskaoyanmall_system WHERE key_name='cskaoyan_mall_order_unconfirm')AS cskaoyan_mall_order_unconfirm,
+(SELECT key_value FROM cskaoyanmall_system WHERE key_name='cskaoyan_mall_order_unpaid')AS cskaoyan_mall_order_unpaid;
+    </select>
+
+
+    <select id="selectWxConfig" resultType="com.cskaoyan.mall.bean.config.WxConfigBean">
+
+    SELECT
+(SELECT key_value FROM cskaoyanmall_system WHERE key_name='cskaoyan_mall_wx_catlog_goods')AS cskaoyan_mall_wx_catlog_goods,
+(SELECT key_value FROM cskaoyanmall_system WHERE key_name='cskaoyan_mall_wx_catlog_list')AS cskaoyan_mall_wx_catlog_list,
+(SELECT key_value FROM cskaoyanmall_system WHERE key_name='cskaoyan_mall_wx_index_brand')AS cskaoyan_mall_wx_index_brand,
+(SELECT key_value FROM cskaoyanmall_system WHERE key_name='cskaoyan_mall_wx_index_hot')AS cskaoyan_mall_wx_index_hot,
+(SELECT key_value FROM cskaoyanmall_system WHERE key_name='cskaoyan_mall_wx_index_new')AS cskaoyan_mall_wx_index_new,
+(SELECT key_value FROM cskaoyanmall_system WHERE key_name='cskaoyan_mall_wx_index_topic')AS cskaoyan_mall_wx_index_topic,
+(SELECT key_value FROM cskaoyanmall_system WHERE key_name='cskaoyan_mall_wx_share')AS cskaoyan_mall_wx_share;
+    </select>
+
+
+    <update id="updateMallConfig">
+
+UPDATE cskaoyanmall_system
+SET key_value = CASE key_name
+WHEN 'cskaoyan_mall_mall_address' THEN #{mallConfigBean.cskaoyan_mall_mall_address}
+WHEN 'cskaoyan_mall_mall_name' THEN #{mallConfigBean.cskaoyan_mall_mall_name}
+WHEN 'cskaoyan_mall_mall_phone' THEN #{mallConfigBean.cskaoyan_mall_mall_phone}
+WHEN 'cskaoyan_mall_mall_qq' THEN #{mallConfigBean.cskaoyan_mall_mall_qq}
+END
+WHERE key_name in('cskaoyan_mall_mall_address','cskaoyan_mall_mall_name','cskaoyan_mall_mall_phone','cskaoyan_mall_mall_qq');
+    </update>
+
+
+
+    <update id="updateExpressConfig">
+
+        UPDATE cskaoyanmall_system
+SET key_value = CASE key_name
+WHEN 'cskaoyan_mall_express_freight_min' THEN #{expressConfigBean.cskaoyan_mall_express_freight_min}
+WHEN 'cskaoyan_mall_express_freight_value' THEN #{expressConfigBean.cskaoyan_mall_express_freight_value}
+END
+WHERE key_name in('cskaoyan_mall_express_freight_min','cskaoyan_mall_express_freight_value');
+    </update>
+
+
+    <update id="updateOrderConfig">
+
+        UPDATE cskaoyanmall_system
+SET key_value = CASE key_name
+WHEN 'cskaoyan_mall_order_comment' THEN #{orderConfigBean.cskaoyan_mall_order_comment}
+WHEN 'cskaoyan_mall_order_unconfirm' THEN #{orderConfigBean.cskaoyan_mall_order_unconfirm}
+WHEN 'cskaoyan_mall_order_unpaid' THEN #{orderConfigBean.cskaoyan_mall_order_unpaid}
+END
+WHERE key_name in('cskaoyan_mall_order_comment','cskaoyan_mall_order_unconfirm','cskaoyan_mall_order_unpaid');
+    </update>
+
+
+    <update id="updateWxConfig">
+
+        UPDATE cskaoyanmall_system
+SET key_value = CASE key_name
+WHEN 'cskaoyan_mall_wx_catlog_goods' THEN #{wxConfigBean.cskaoyan_mall_wx_catlog_goods}
+WHEN 'cskaoyan_mall_wx_catlog_list' THEN #{wxConfigBean.cskaoyan_mall_wx_catlog_list}
+WHEN 'cskaoyan_mall_wx_index_brand' THEN #{wxConfigBean.cskaoyan_mall_wx_index_brand}
+WHEN 'cskaoyan_mall_wx_index_hot' THEN #{wxConfigBean.cskaoyan_mall_wx_index_hot}
+WHEN 'cskaoyan_mall_wx_index_new' THEN #{wxConfigBean.cskaoyan_mall_wx_index_new}
+WHEN 'cskaoyan_mall_wx_index_topic' THEN #{wxConfigBean.cskaoyan_mall_wx_index_topic}
+WHEN 'cskaoyan_mall_wx_share' THEN #{wxConfigBean.cskaoyan_mall_wx_share}
+END
+WHERE key_name in('cskaoyan_mall_wx_catlog_goods','cskaoyan_mall_wx_catlog_list','cskaoyan_mall_wx_index_brand','cskaoyan_mall_wx_index_hot','cskaoyan_mall_wx_index_new','cskaoyan_mall_wx_index_topic','cskaoyan_mall_wx_share');
+    </update>
+</mapper>
